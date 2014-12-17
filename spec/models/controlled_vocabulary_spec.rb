@@ -22,6 +22,20 @@ RSpec.describe ControlledVocabulary do
     end
   end
 
+  describe "validations" do
+    context "when not given a uri" do
+      let(:uri) { nil }
+      it "should be invalid" do
+        expect(resource).not_to be_valid
+      end
+    end
+    context "when given a URI" do
+      it "should be valid" do
+        expect(resource).to be_valid
+      end
+    end
+  end
+
   describe "#issued" do
     before do
       stub_repository
@@ -81,6 +95,30 @@ RSpec.describe ControlledVocabulary do
             expect(before_modified).not_to eq reloaded.modified.first
             expect(reloaded.modified.first).to eq Date.today
           end
+        end
+      end
+    end
+
+    describe ".base_uri" do
+      it "should be set to opaquenamespace.org" do
+        expect(resource.class.base_uri).to eq "http://opaquenamespace.org/ns/"
+      end
+    end
+
+    describe "#id" do
+      context "with no id" do
+        let(:resource) { ControlledVocabulary.new }
+        it "should be nil" do
+          expect(resource.id).to be_nil
+        end
+      end
+      context "with an id" do
+        let(:resource) { ControlledVocabulary.new("bla/bla") }
+        before do
+          resource.persist!
+        end
+        it "should be just the id" do
+          expect(resource.id).to eq "bla/bla"
         end
       end
     end

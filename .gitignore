@@ -24,4 +24,5 @@ jetty
 # Ignore marmotta
 marmotta
 
+# Ignore dotenv
 .env
