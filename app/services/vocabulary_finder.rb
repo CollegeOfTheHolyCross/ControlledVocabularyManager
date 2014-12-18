@@ -1,6 +1,6 @@
 class VocabularyFinder
-  def call
-   ActiveTriples::Repositories.repositories[:Vocabulary].sparql.query("select ?resource where {
+  def self.call
+    ActiveTriples::Repositories.repositories[Vocabulary.repository].query_client.query("select ?resource where {
  	rdf:type ?rdf_type
 	filter strstarts(str(?resource), $base_uri)
 	}").dump
