@@ -1,10 +1,10 @@
 require 'rails_helper'
 
-describe VocabularyFinder do
+RSpec.describe VocabularyFinder do
   describe ".call" do
     let(:result) { VocabularyFinder.call }
     before do
-      stub_repo
+      stub_repository
     end
     context "when there are vocabulary objects" do
       let(:vocab_1) { Vocabulary.new("first") }
