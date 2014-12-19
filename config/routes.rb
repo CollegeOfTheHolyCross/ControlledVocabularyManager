@@ -6,7 +6,9 @@ Rails.application.routes.draw do
   root 'home#index'
 
   get '/ns/*id', :to => "controlled_vocabularies#show", :constraints => {:id => /.+/}, :as => "controlled_vocabulary"
-
+  get '/vocabularies', :to => "controlled_vocabularies#index", :as => "controlled_vocabularies"
+  get '/login'  => 'login#doauth'
+  
   # Example of regular route:
   #   get 'products/:id' => 'catalog#view'
 
