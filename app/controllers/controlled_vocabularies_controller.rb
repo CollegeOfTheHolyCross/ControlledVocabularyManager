@@ -1,18 +1,31 @@
+
+require 'json/ld'
+
 class ControlledVocabulariesController < ApplicationController
-  
-  
-  
- def show
+  before_filter :load_vocab, :only => :show
+  before_filter :authorize
+  def show
+    respond_to do |format|
+      format.html
+      format.nt { render body: @vocab.dump(:ntriples), :content_type => Mime::NT }
+      format.jsonld { render body: @vocab.dump(:jsonld, standard_prefixes: true), :content_type => Mime::JSONLD }
+    end
   end
-  
-  def index
-  authorize
-  end
-  
-  
- 
-  
+
   private
+
+  def load_vocab
+    @vocab = ControlledVocabulary.new(params[:id])
+    @vocab.persisted? or render_404
+  end
+
+  def render_404
+    respond_to do |format|
+      format.html { render :file => "#{Rails.root}/public/404", :layout => true, :status => 404 }
+      format.all { render nothing: true, status: 404 }
+    end
+
+  end
   
   def authorize
     if session[:authorized] != true
