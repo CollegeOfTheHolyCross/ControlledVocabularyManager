@@ -1,12 +1,16 @@
 class VocabularyFinder
   def self.call
-    ActiveTriples::Repositories.repositories[Vocabulary.repository].query_client.query("select distinct ?resource where {
-	?resource rdf:type $type
-	filter strstarts(str(?resource), $base_uri)}")
+    sparql = ActiveTriples::Repositories.repositories[Vocabulary.repository].query_client
+
+    result = sparql.query("select * where {
+	?s ?p ?o
+	filter(regex(str(?s), 'http://opaquenamespace.org/ns'))}")
+
+    puts result.inspect
   end
 
   def base_uri
-   return Vocabulary.base_uri
+   return "http://opaquenamespace.org/ns"
   end
 
   def type
