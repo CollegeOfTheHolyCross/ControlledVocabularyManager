@@ -8,9 +8,9 @@
           <li class="active"><a href="#">Home</a></li>
           <li><%= link_to "Vocabularies", vocabularies_path %></li>
           <%- if session[:authorized] == true  %>
-          	<li><%= link_to "Logout", login_path %></li>
+          	<li><%= link_to "Logout", '/login/auth' %></li>
           	<%- else -%>
-          <li><%= link_to "Login", login_path %></li>
+          <li><%= link_to "Login", '/login/auth' %></li>
         <%- end -%>
         </ul>
       </div><!--/.nav-collapse -->

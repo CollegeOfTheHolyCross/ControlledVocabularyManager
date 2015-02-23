@@ -1,5 +1,8 @@
 class LoginController < ApplicationController
   
+  def index
+  end
+  
   def doauth
   #logger.debug "session var: #{session[:authorized]}"
   if session[:authorized] != true
@@ -16,7 +19,6 @@ class LoginController < ApplicationController
 
   def authenticate
     unless github_authenticated?
-      flash.now[:notice] = "Please log in." #this is not working
       github_authenticate!
   	end
   	
@@ -40,7 +42,8 @@ class LoginController < ApplicationController
     github_logout
     session[:authorized] = false
     session.delete(:user_route)
-    redirect_to '/', notice: "You have logged out" #doesn't work
+    flash[:notice] = "You have logged out"
+    redirect_to "/"
     
   end
   
