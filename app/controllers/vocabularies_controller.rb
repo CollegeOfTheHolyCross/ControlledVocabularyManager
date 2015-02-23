@@ -15,6 +15,14 @@ class VocabulariesController < ApplicationController
     VocabularyCreator.call(params[:vocabulary], CreateResponder.new(self))
   end
 
+def authorize
+    if session[:authorized] != true
+    session[:user_route] = request.env['PATH_INFO']
+    redirect_to '/login'
+      
+  	end
+end
+  	
   class CreateResponder < SimpleDelegator
     def success(vocabulary)
       redirect_to term_path(vocabulary)
@@ -25,12 +33,6 @@ class VocabulariesController < ApplicationController
       render :new
     end
     
-    def authorize
-    if session[:authorized] != true
-      flash[:notice] = "Not authorized for this page."
-      redirect_to '/'
-  	
-  	end
-  end
+    
   end
 end
