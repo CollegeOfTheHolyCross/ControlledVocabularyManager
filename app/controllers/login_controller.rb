@@ -39,8 +39,8 @@ class LoginController < ApplicationController
    	#logger.debug "logging out"
     github_logout
     session[:authorized] = false
-    
-    redirect_to '/', notice: "You have logged out"
+    session.delete(:user_route)
+    redirect_to '/', notice: "You have logged out" #doesn't work
     
   end
   
