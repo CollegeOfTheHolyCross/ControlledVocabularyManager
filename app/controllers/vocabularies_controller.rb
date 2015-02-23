@@ -1,10 +1,7 @@
-require 'json/ld'
-
 class VocabulariesController < ApplicationController
   before_filter :load_vocab, :only => :show
   before_filter :authorize, :only => [:new, :create]
   def index
-
   end
 
   def new
@@ -15,13 +12,14 @@ class VocabulariesController < ApplicationController
     VocabularyCreator.call(params[:vocabulary], CreateResponder.new(self))
   end
 
-def authorize
+
+  def authorize
     if session[:authorized] != true
     session[:user_route] = request.env['PATH_INFO']
     redirect_to '/login'
       
   	end
-end
+  end
   	
   class CreateResponder < SimpleDelegator
     def success(vocabulary)
@@ -35,4 +33,5 @@ end
     
     
   end
+
 end
