@@ -1,7 +1,7 @@
 class LoginController < ApplicationController
   
   def doauth
-  logger.debug "session var: #{session[:authorized]}"
+  #logger.debug "session var: #{session[:authorized]}"
   if session[:authorized] != true
   	authenticate
   	authorize
@@ -16,6 +16,7 @@ class LoginController < ApplicationController
 
   def authenticate
     unless github_authenticated?
+      flash.now[:notice] = "Please log in." #this is not working
       github_authenticate!
   	end
   	
@@ -24,22 +25,22 @@ class LoginController < ApplicationController
 
   def authorize
     session[:authorized] ||= github_user.organization_member?('OregonDigital')
-    logger.debug "session var is set #{session[:authorized]}"
-    logger.debug "user is #{github_user.name}"
-   # render :status => 403, :text => "Not Authorized" unless session[:authorized] != true
+    #logger.debug "session var is set #{session[:authorized]}"
+    #logger.debug "user is #{github_user.name}"
     if session[:authorized] != true
       flash.keep[:notice] = "authorization failed"
     #else flash.keep[:notice]= "#{github_user.name} is logged in " 
     end
-    redirect_to '/'
+   session[:user_route] ||= "/"
+    redirect_to session[:user_route]
   end
   
    def destroy
-   	logger.debug "logging out"
+   	#logger.debug "logging out"
     github_logout
     session[:authorized] = false
-    flash[:notice]= "You have logged out"
-    redirect_to '/'
+    
+    redirect_to '/', notice: "You have logged out"
     
   end
   
