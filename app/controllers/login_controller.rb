@@ -1,7 +1,7 @@
 class LoginController < ApplicationController
   
   def doauth
-	
+  logger.debug "session var: #{session[:authorized]}"
   if session[:authorized] != true
   	authenticate
   	authorize
@@ -35,7 +35,7 @@ class LoginController < ApplicationController
   end
   
    def destroy
-   	
+   	logger.debug "logging out"
     github_logout
     session[:authorized] = false
     flash[:notice]= "You have logged out"
