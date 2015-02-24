@@ -11,17 +11,18 @@ class VocabulariesController < ApplicationController
   def create
     VocabularyCreator.call(params[:vocabulary], CreateResponder.new(self))
   end
-  
-  
 
-def authorize
+  def authorize
     if session[:authorized] != true
-    session[:user_route] = request.env['PATH_INFO']
+      session[:user_route] = request.env['PATH_INFO']
     
-    redirect_to '/login'
+      redirect_to '/login'
       
   	end
-end
+
+  end
+
+
   	
   class CreateResponder < SimpleDelegator
     def success(vocabulary)
