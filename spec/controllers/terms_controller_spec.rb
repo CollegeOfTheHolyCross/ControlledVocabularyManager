@@ -3,7 +3,10 @@ require 'rails_helper'
 RSpec.describe TermsController do
   let(:uri) { "http://opaquenamespace.org/ns/bla" }
   let(:resource) { term_mock }
-
+  let(:logged_in) { true }
+  before do
+    allow(controller).to receive(:authorize).and_return(true) if logged_in
+  end
   describe '#show' do
     before do
       stub_repository
@@ -68,6 +71,12 @@ RSpec.describe TermsController do
     def get_new
       get :new, :vocabulary_id => vocabulary.id
     end
+    context "when logged out" do
+      let(:logged_in) { false }
+      it "should require login" do
+        expect(get_new).to redirect_to login_path
+      end
+    end
     context "when the vocabulary is not persisted" do
       before do
         expect(Vocabulary).to receive(:find).with(vocabulary.id).and_raise ActiveTriples::NotFound
@@ -112,6 +121,14 @@ RSpec.describe TermsController do
         controller.render :nothing => true
       end
     end
+    
+    context "when logged out" do
+      let(:logged_in) { false }
+      it "should require login" do
+        expect(post(:create, params)).to redirect_to login_path
+      end
+    end
+
     it "should call TermCreator" do
       expect(TermsController::CreateResponder).to receive(:new).with(controller).and_return(create_responder)
       expect(TermCreator).to receive(:call).with(params[:term], vocabulary, [create_responder])

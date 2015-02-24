@@ -8,7 +8,6 @@ RSpec.describe VocabulariesController do
 
   
   describe "GET 'new'" do
-    let(:user) { github_login(:admin)}
     let(:result) { get 'new' }
     before do
       result
