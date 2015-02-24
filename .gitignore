@@ -29,3 +29,6 @@ marmotta
 
 #Ignore ruby
 .ruby-version
+
+#Ignore stupid mac files
+.DS_Store
